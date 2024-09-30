@@ -54,6 +54,33 @@ class PageController extends Controller
 
 
         return response(compact('success', 'project'));
+
     }
+
+    //metodo che restituisce l'API dei progetti per tipo
+    public function projectByType(){
+        $projects = Project::orderBy('id', 'desc')->with('type')->get();
+
+        if($projects){
+            $success = true;
+        }else{
+            $success = false;
+        }
+
+        return response()->json(compact('success', 'projects'));
+    }
+
+    //metodo che restituisce l'API con l'elenco dei progetti per tecnologia
+    public function projectByTechnologies()
+    {
+        $projects = Project::orderBy('id', 'desc')->with('technologies')->get();
+        if ($projects) {
+            $success = true;
+        } else {
+            $success = false;
+        }
+        return response()->json(compact('success', 'projects'));
+    }
+
 
 }
