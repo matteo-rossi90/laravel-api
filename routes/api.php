@@ -27,3 +27,6 @@ Route::get('/type', [PageController::class, 'type']);
 
 //route per l'elenco delle tecnologie
 Route::get('/technologies', [PageController::class, 'technologies']);
+
+//route per il singolo progetto
+Route::get('/project-by-slug/{slug}', [PageController::class, 'projectBySlug']);

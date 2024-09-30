@@ -30,4 +30,30 @@ class PageController extends Controller
 
         return response()->json($technologies);
     }
+
+    //metodo per creare una API di un singolo progetto con tipo e tecnologie associate attraverso lo slug
+    public function projectBySlug($slug){
+
+        $project = Project::where('slug', $slug)->with('type', 'technologies')->first();
+
+        //se il progetto esiste il controllo è andato a buon fine
+        if($project){
+            $success = true;
+            //e l'immagine presenta il percorso assoluto se esiste
+            if ($project->img) {
+                $project->img = asset('storage/' . $project->img);
+            //se l'immagine non è presente, sarà presente il placeholder
+            } else {
+                $project->img = '/img/placeholder.jpg';
+                $project->original_name_img = 'nessuna immagine';
+            }
+        //se il progetto non esiste l'operazione non è andata a buon fine
+        }else{
+            $success = false;
+        }
+
+
+        return response(compact('success', 'project'));
+    }
+
 }
