@@ -31,6 +31,8 @@ class PageController extends Controller
         return response()->json($technologies);
     }
 
+    //BONUS//
+
     //metodo per creare una API di un singolo progetto con tipo e tecnologie associate attraverso lo slug
     public function projectBySlug($slug){
 
@@ -63,6 +65,17 @@ class PageController extends Controller
 
         if($projects){
             $success = true;
+
+            //per reiterare la gestione del percorso delle immagini per ogni progetto
+            foreach($projects as $project){
+                if ($project->img) {
+                    $project->img = asset('storage/' . $project->img);
+
+                } else {
+                    $project->img = '/img/placeholder.jpg';
+                    $project->original_name_img = 'nessuna immagine';
+                }
+            }
         }else{
             $success = false;
         }
@@ -76,6 +89,17 @@ class PageController extends Controller
         $projects = Project::orderBy('id', 'desc')->with('technologies')->get();
         if ($projects) {
             $success = true;
+
+            //per reiterare la gestione del percorso delle immagini per ogni progetto
+            foreach ($projects as $project) {
+                if ($project->img) {
+                    $project->img = asset('storage/' . $project->img);
+                } else {
+                    $project->img = '/img/placeholder.jpg';
+                    $project->original_name_img = 'nessuna immagine';
+                }
+            }
+
         } else {
             $success = false;
         }
