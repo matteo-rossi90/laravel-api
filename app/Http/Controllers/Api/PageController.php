@@ -14,6 +14,16 @@ class PageController extends Controller
     public function index(){
         $projects = Project::orderBy('id', 'desc')->with('type', 'technologies')->paginate(10);
 
+        //per reiterare la gestione del percorso delle immagini per ogni progetto
+        foreach ($projects as $project) {
+            if ($project->img) {
+                $project->img = asset('storage/' . $project->img);
+            } else {
+                $project->img = '/img/placeholder.jpg';
+                $project->original_name_img = 'nessuna immagine';
+            }
+        }
+
         return response()->json($projects);
     }
 
@@ -60,50 +70,30 @@ class PageController extends Controller
     }
 
     //metodo che restituisce l'API dei progetti per tipo
-    public function projectByType(){
-        $projects = Project::orderBy('id', 'desc')->with('type')->get();
+    public function projectByType($slug){
 
-        if($projects){
+        $type = Type::where('slug', $slug)->with('projects.type')->get();
+
+        if($type){
             $success = true;
-
-            //per reiterare la gestione del percorso delle immagini per ogni progetto
-            foreach($projects as $project){
-                if ($project->img) {
-                    $project->img = asset('storage/' . $project->img);
-
-                } else {
-                    $project->img = '/img/placeholder.jpg';
-                    $project->original_name_img = 'nessuna immagine';
-                }
-            }
         }else{
             $success = false;
         }
 
-        return response()->json(compact('success', 'projects'));
+        return response()->json(compact('success', 'type'));
     }
 
     //metodo che restituisce l'API con l'elenco dei progetti per tecnologia
-    public function projectByTechnologies()
+    public function projectByTechnologies($slug)
     {
-        $projects = Project::orderBy('id', 'desc')->with('technologies')->get();
-        if ($projects) {
+        $technologies = Technology::where('slug', $slug)->with('projects.technologies')->get();
+
+        if ($technologies) {
             $success = true;
-
-            //per reiterare la gestione del percorso delle immagini per ogni progetto
-            foreach ($projects as $project) {
-                if ($project->img) {
-                    $project->img = asset('storage/' . $project->img);
-                } else {
-                    $project->img = '/img/placeholder.jpg';
-                    $project->original_name_img = 'nessuna immagine';
-                }
-            }
-
         } else {
             $success = false;
         }
-        return response()->json(compact('success', 'projects'));
+        return response()->json(compact('success', 'technologies'));
     }
 
 

@@ -32,7 +32,7 @@ Route::get('/technologies', [PageController::class, 'technologies']);
 Route::get('/project-by-slug/{slug}', [PageController::class, 'projectBySlug']);
 
 //route per l'elenco dei progetti per tipo
-Route::get('/project-by-type', [PageController::class, 'projectByType']);
+Route::get('/project-by-type/{slug}', [PageController::class, 'projectByType']);
 
 //route per l'elenco dei progetti per tecnologia
-Route::get('/project-by-technologies', [PageController::class, 'projectByTechnologies']);
+Route::get('/project-by-technologies/{slug}', [PageController::class, 'projectByTechnologies']);
