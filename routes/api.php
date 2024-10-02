@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //route che consente di mandare le API dei progetti con tipologie e tecnologie nella view
-Route::get('/', [PageController::class, 'index']);
+Route::get('/projects', [PageController::class, 'index']);
 
 //route per l'elenco dei tipi
 Route::get('/type', [PageController::class, 'type']);
