@@ -72,11 +72,22 @@ class PageController extends Controller
     //metodo che restituisce l'API dei progetti per tipo
     public function projectByType($slug){
 
-        $type = Type::where('slug', $slug)->with('projects.type')->get();
+        $type = Type::where('slug', $slug)->with('projects.technologies')->first();
 
-        if($type){
+        if ($type) {
+
+            foreach ($type->projects as $project) {
+                if ($project->img) {
+                    $project->img = asset('storage/' . $project->img);
+                }
+                else {
+                    $project->img = '/img/placeholder.jpg';
+                    $project->original_name_img = 'nessuna immagine';
+                }
+            }
+
             $success = true;
-        }else{
+        } else {
             $success = false;
         }
 
@@ -86,9 +97,19 @@ class PageController extends Controller
     //metodo che restituisce l'API con l'elenco dei progetti per tecnologia
     public function projectByTechnologies($slug)
     {
-        $technologies = Technology::where('slug', $slug)->with('projects.technologies')->get();
+        $technologies = Technology::where('slug', $slug)->with('projects.type')->first();
 
         if ($technologies) {
+
+                foreach ($technologies->projects as $project) {
+                    if ($project->img) {
+                        $project->img = asset('storage/' . $project->img);
+                    } else {
+                        $project->img = '/img/placeholder.jpg';
+                        $project->original_name_img = 'nessuna immagine';
+                    }
+                }
+
             $success = true;
         } else {
             $success = false;
